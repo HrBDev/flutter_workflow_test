@@ -1,4 +1,4 @@
-name: CI(macos)
+name: CI
 
 on:
   push:
@@ -23,6 +23,23 @@ jobs:
         with:
           name: web-build
           path: build/web
+  build_android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.2.0
+        with:
+          channel: 'stable'
+      - run: |
+        flutter pub get
+        flutter clean
+        flutter build apk --release --split-per-abi
+      - name: Upload Android
+        uses: actions/upload-artifact@1.0.0
+        with:
+          name: android-build
+          path: build/app/outputs/apk/release
   build_windows:
     name: Build Windows
     runs-on: windows-latest
@@ -43,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@1.0.0
       with:
         name: windows-build
-        path: build/windows/x64/Release/Runner/
+        path: build/windows
   build_ios:
     name: Build iOS
     runs-on: macos-latest 
