@@ -18,16 +18,16 @@ jobs:
     - uses: subosito/flutter-action@v1.2.0
       with:
         channel: 'stable'
-    - name: Upload Windows Build
-      uses: actions/upload-artifact@1.0.0
-      with:
-        name: windows-build
-        path: build/windows
     - run: flutter channel master
     - run: flutter upgrade
     - run: flutter pub get
     - run: flutter config --enable-windows-desktop 
     - run: flutter build windows
+    - name: Upload Windows Build
+      uses: actions/upload-artifact@1.0.0
+      with:
+        name: windows-build
+        path: build/windows
   build_ios:
     name: Build iOS
     runs-on: macos-latest 
@@ -39,11 +39,10 @@ jobs:
     - uses: subosito/flutter-action@v1.2.0
       with:
         channel: 'stable'
+    - run: flutter pub get
+    - run: flutter build ios --release --no-codesign
     - name: Upload iOS Build
       uses: actions/upload-artifact@1.0.0
       with:
         name: ios-build
         path: build/ios/iphoneos
-    - run: flutter pub get
-    - run: flutter build ios --release --no-codesign
-  
