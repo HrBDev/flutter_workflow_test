@@ -7,6 +7,22 @@ on:
     branches: [ master ]
 
 jobs:
+  build_web:
+    name: Build Web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.2.0
+        with:
+          channel: 'beta'
+      - run: flutter pub get
+      - run: flutter config --enable-web
+      - run: flutter build web
+      - name: Upload web
+        uses: actions/upload-artifact@1.0.0
+        with:
+          name: web-build
+          path: build/web
   build_windows:
     name: Build Windows
     runs-on: windows-latest
@@ -27,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@1.0.0
       with:
         name: windows-build
-        path: build/windows
+        path: build/windows/x64/Release/Runner/
   build_ios:
     name: Build iOS
     runs-on: macos-latest 
@@ -39,6 +55,7 @@ jobs:
     - uses: subosito/flutter-action@v1.2.0
       with:
         channel: 'stable'
+    - run: flutter channel master
     - run: flutter pub get
     - run: flutter build ios --release --no-codesign
     - name: Upload iOS Build
