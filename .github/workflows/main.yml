@@ -31,10 +31,9 @@ jobs:
       - uses: subosito/flutter-action@v1.2.0
         with:
           channel: 'stable'
-      - run: |
-        flutter pub get
-        flutter clean
-        flutter build apk --release --split-per-abi
+      - run: flutter pub get
+      - run: flutter clean
+      - run: flutter build apk --release --split-per-abi
       - name: Upload Android
         uses: actions/upload-artifact@1.0.0
         with:
